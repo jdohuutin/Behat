@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Definition\Translator;
 
+use Behat\Behat\Context\TranslatableContext;
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Suite\Suite;
 
@@ -48,6 +49,10 @@ final class DefinitionTranslator
     {
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
+
+        if (is_a($definition->getReflection()->class, TranslatableContext::class, true) === false) {
+            return $definition;
+        }
 
         $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
         if ($pattern != $translatedPattern) {
